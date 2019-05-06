@@ -1,19 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 //this script can be found in the Component section under the option Intro RPG/Player/Interact
 [AddComponentMenu("Intro PRG/RPG/Player/Interact")]
 public class Interact : MonoBehaviour
 {
     #region Variables
-    [Header("Player and Camera connection")]
-    //create two gameobject variables one called player and the other mainCam
-    public GameObject player;
-    public GameObject mainCamera;
+    public Image image;
+
     #endregion
-    #region Start
-    //connect our player to the player variable via tag
-    //connect our Camera to the mainCam variable via tag
-    #endregion
+
     #region Update
     private void Update()
     {
@@ -32,9 +28,10 @@ public class Interact : MonoBehaviour
                 #region NPC tag
                 //and that hits info is tagged NPC
                 if (hitInfo.collider.CompareTag("NPC"))
-                { 
+                {
+                    Movement.canMove = false;
                     //Debug that we hit a NPC
-                    Debug.Log("NPC");
+                    Debug.Log("You are talking to NPC");
                 }
                 #endregion
                 #region Item
@@ -42,7 +39,7 @@ public class Interact : MonoBehaviour
                 if (hitInfo.collider.CompareTag("Item"))
                 {
                     //Debug that we hit an Item
-                    Debug.Log("Item");
+                    Debug.Log("It is an Item");
                 }
                 #endregion
             }
