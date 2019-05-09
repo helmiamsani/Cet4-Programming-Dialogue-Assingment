@@ -3,22 +3,30 @@ using System.Collections;
 using UnityEngine.UI;
 
 //this script can be found in the Component section under the option Intro RPG/Player/Interact
-[AddComponentMenu("Intro PRG/RPG/Player/Interact")]
+//[AddComponentMenu("Intro PRG/RPG/Player/Interact")]
 public class Interact : MonoBehaviour
 {
     #region Variables
     public Image image;
     public Text[] texts;
     [Space]
-    public GameObject nextButton, acceptButton, declineButton, finishButton;
+    public GameObject nextButton, acceptButton, declineButton, finishButton, completedQuestButton;
+    public bool isButtonPressed = false;
     [Space]
     public QuestManager quest;
+    [Space]
+    public GameObject[] items;
+    public int itemsIndex;
+    [Space]
+    public bool isQuestDone = false;
+    public bool missCompleted = false;
     #endregion
 
     #region Start
     private void Start()
     {
         QuestManager quest = GetComponent<QuestManager>();
+        items = GameObject.FindGameObjectsWithTag("Item");
     }
     #endregion
 
@@ -41,18 +49,38 @@ public class Interact : MonoBehaviour
                 //and that hits info is tagged NPC
                 if (hitInfo.collider.CompareTag("NPC"))
                 {
-                    nextButton.SetActive(true);
-                    texts[0].enabled = true;
-                    image.enabled = true;
-                    Movement.canMove = false;
-                    //Debug that we hit a NPC
-                    Debug.Log("You are talking to NPC");
+                    if (missCompleted == false)
+                    {
+                        nextButton.SetActive(true);
+                        texts[0].enabled = true;
+                        image.enabled = true;
+                        Movement.canMove = false;
+                        //Debug that we hit a NPC
+                        Debug.Log("You are talking to NPC");
+
+                        if (isQuestDone == true)
+                        {
+                            nextButton.SetActive(false);
+                            texts[0].enabled = false;
+                            Movement.canMove = false;
+                            image.enabled = true;
+                            texts[4].enabled = true;
+                            completedQuestButton.SetActive(true);
+                        }
+                    }                    
                 }
                 #endregion
                 #region Item
                 //and that hits info is tagged Item
                 if (hitInfo.collider.CompareTag("Item"))
                 {
+                    DestroyItems();
+
+                    if(QuestManager.questNumber == 0)
+                    {
+                        isQuestDone = true;
+                    }
+
                     //Debug that we hit an Item
                     Debug.Log("It is an Item");
                 }
@@ -61,6 +89,23 @@ public class Interact : MonoBehaviour
         }
     }
     #endregion
+
+    public void DestroyItems()
+    {
+        if(isButtonPressed == true)
+        {
+            Destroy(items[itemsIndex]);
+
+            if (QuestManager.questNumber > 0)
+            {
+                QuestManager.questNumber--;
+            }
+
+            itemsIndex++;
+            Debug.Log("An item is destroyed");
+        }
+    }
+
 
     #region Button Manager
     public void NextButton()
@@ -74,6 +119,7 @@ public class Interact : MonoBehaviour
 
     public void AcceptButton()
     {
+        isButtonPressed = true;
         texts[1].enabled = false;
         texts[2].enabled = false;
         acceptButton.SetActive(false);
@@ -101,6 +147,7 @@ public class Interact : MonoBehaviour
         texts[3].enabled = false;
         finishButton.SetActive(false);
         image.enabled = false;
+        texts[4].enabled = false;
         Movement.canMove = true;
     }
     #endregion
