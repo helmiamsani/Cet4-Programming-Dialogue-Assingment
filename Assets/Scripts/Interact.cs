@@ -11,12 +11,14 @@ public class Interact : MonoBehaviour
     public Text[] texts;
     [Space]
     public GameObject nextButton, acceptButton, declineButton, finishButton;
+    [Space]
+    public QuestManager quest;
     #endregion
 
     #region Start
     private void Start()
     {
-
+        QuestManager quest = GetComponent<QuestManager>();
     }
     #endregion
 
@@ -73,10 +75,14 @@ public class Interact : MonoBehaviour
     public void AcceptButton()
     {
         texts[1].enabled = false;
-        texts[2].enabled = true;
+        texts[2].enabled = false;
         acceptButton.SetActive(false);
         declineButton.SetActive(false);
-        finishButton.SetActive(true);
+        finishButton.SetActive(false);
+        quest.questPanel.SetActive(false);
+        image.enabled = false;
+        Movement.canMove = true;
+        quest.questStyle[0].SetActive(true);
     }
 
     public void DeclineButton()
