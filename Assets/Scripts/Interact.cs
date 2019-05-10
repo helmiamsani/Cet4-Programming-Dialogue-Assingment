@@ -20,6 +20,8 @@ public class Interact : MonoBehaviour
     [Space]
     public bool isQuestDone = false;
     public bool missCompleted = false;
+    [Space]
+    public GameObject[] tutorials;
     #endregion
 
     #region Start
@@ -100,7 +102,7 @@ public class Interact : MonoBehaviour
             {
                 QuestManager.questNumber--;
             }
-
+            QuestManager.mushroomAmount++;
             itemsIndex++;
             Debug.Log("An item is destroyed");
         }

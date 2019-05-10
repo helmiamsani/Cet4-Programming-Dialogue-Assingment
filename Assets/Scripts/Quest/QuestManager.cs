@@ -7,6 +7,7 @@ public class QuestManager : MonoBehaviour
 {
     public GameObject questPanel;
     public GameObject completedQuestPanel;
+    public GameObject inventoryPanel;
     public GameObject[] questStyle;
     [Space]
     public static int questNumber = 3;
@@ -14,6 +15,9 @@ public class QuestManager : MonoBehaviour
     [Space]
     public static int Money = 0;
     public Text moneyText;
+    [Space]
+    public static int mushroomAmount;
+    public Text mushroomText;
     [Space]
     public Interact interact;
     [Space]
@@ -52,5 +56,11 @@ public class QuestManager : MonoBehaviour
     {
         questNumText.text = questNumber.ToString();
         moneyText.text = "$ " + Money.ToString();
+        mushroomText.text = mushroomAmount.ToString();
+
+        if (Input.GetKey(KeyCode.Q))
+        {
+            inventoryPanel.SetActive(true);
+        }
     }
 }
