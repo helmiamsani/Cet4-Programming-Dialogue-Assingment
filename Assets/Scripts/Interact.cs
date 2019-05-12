@@ -15,8 +15,11 @@ public class Interact : MonoBehaviour
     [Space]
     public QuestManager quest;
     [Space]
+    public GameObject player;
     public GameObject[] items;
     public int itemsIndex;
+    public GameObject NPC;
+    public float range = 5f;
     [Space]
     public bool isQuestDone = false;
     public bool missCompleted = false;
@@ -29,11 +32,13 @@ public class Interact : MonoBehaviour
     {
         QuestManager quest = GetComponent<QuestManager>();
         items = GameObject.FindGameObjectsWithTag("Item");
+        NPC = GameObject.FindGameObjectWithTag("NPC");
+        player = GameObject.FindGameObjectWithTag("Player");
     }
     #endregion
 
     #region Update
-    private void Update()
+    public void Update()
     {
         //if our interact key is pressed
         if (Input.GetButtonDown("Interact"))
@@ -45,12 +50,13 @@ public class Interact : MonoBehaviour
             //create hit info
             RaycastHit hitInfo;
             //if this physics raycast hits something within 10 units
-            if (Physics.Raycast(interact, out hitInfo,10))
+            if (Physics.Raycast(interact, out hitInfo, range))
             {
                 #region NPC tag
                 //and that hits info is tagged NPC
                 if (hitInfo.collider.CompareTag("NPC"))
                 {
+
                     if (missCompleted == false)
                     {
                         nextButton.SetActive(true);
@@ -68,6 +74,7 @@ public class Interact : MonoBehaviour
                             image.enabled = true;
                             texts[4].enabled = true;
                             completedQuestButton.SetActive(true);
+                            QuestManager.mushroomAmount -= 3;
                         }
                     }                    
                 }
@@ -92,6 +99,7 @@ public class Interact : MonoBehaviour
     }
     #endregion
 
+    #region Destroying Items
     public void DestroyItems()
     {
         if(isButtonPressed == true)
@@ -107,7 +115,7 @@ public class Interact : MonoBehaviour
             Debug.Log("An item is destroyed");
         }
     }
-
+    #endregion
 
     #region Button Manager
     public void NextButton()
@@ -153,6 +161,8 @@ public class Interact : MonoBehaviour
         Movement.canMove = true;
     }
     #endregion
+
+
 }
 
 

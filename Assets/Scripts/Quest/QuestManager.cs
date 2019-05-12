@@ -22,6 +22,7 @@ public class QuestManager : MonoBehaviour
     public Interact interact;
     [Space]
     public Canvas oldmanCanvas;
+    private bool isInventoryON = false;
 
     void Start()
     {
@@ -58,9 +59,28 @@ public class QuestManager : MonoBehaviour
         moneyText.text = "$ " + Money.ToString();
         mushroomText.text = mushroomAmount.ToString();
 
-        if (Input.GetKey(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
-            inventoryPanel.SetActive(true);
+            if (isInventoryON)
+            {
+                InventoryIsOFF();
+            }
+            else
+            {
+                InventoryIsON();
+            }
         }
+    }
+
+    public void InventoryIsON()
+    {
+        inventoryPanel.SetActive(true);
+        isInventoryON = true;
+    }
+
+    public void InventoryIsOFF()
+    {
+        inventoryPanel.SetActive(false);
+        isInventoryON = false;
     }
 }
